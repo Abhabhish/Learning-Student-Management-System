@@ -155,7 +155,7 @@ function closeViewNoticeModal() {
 // Delete Notice Modal Functions
 function confirmDeleteNotice(noticeId) {
   document.getElementById('deleteNoticeId').value = noticeId;
-  document.getElementById('deleteNoticeForm').action = `/app/delete-notice/${noticeId}/`;
+  document.getElementById('deleteNoticeForm').action = `/app/hod/delete-notice/${noticeId}/`;
   document.getElementById('deleteNoticeModal').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }

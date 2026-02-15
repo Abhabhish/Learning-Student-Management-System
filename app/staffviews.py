@@ -36,7 +36,6 @@ from app.utils import (
 
 
 @login_required
-@never_cache
 def teacherDashboard(request):
     """View to display the teacher dashboard with their classes and student information"""
 

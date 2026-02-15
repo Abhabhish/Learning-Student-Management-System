@@ -8,7 +8,7 @@
       <button style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 24px;" onclick="closeAddStudentModal()">&times;</button>
     </div>
     <div style="padding: 20px; max-height: calc(90vh - 60px); overflow-y: auto; -webkit-overflow-scrolling: touch;">
-      <form id="addStudentForm" method="post" action="/app/add-student/" enctype="multipart/form-data">
+      <form id="addStudentForm" method="post" action="{% url 'admission_add_student' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="row mb-3">
@@ -294,7 +294,7 @@
       <button style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 24px;" onclick="closeEditStudentModal()">&times;</button>
     </div>
     <div style="padding: 20px; max-height: calc(90vh - 60px); overflow-y: auto; -webkit-overflow-scrolling: touch;">
-      <form id="editStudentForm" method="post" action="/app/edit-student/" enctype="multipart/form-data">
+      <form id="editStudentForm" method="post" action="{% url 'admission_edit_student' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" id="edit_student_id" name="student_id">
         
@@ -592,7 +592,7 @@
     document.body.style.overflow = 'hidden';
     
     // Fetch student details
-    fetch(`/app/get-student/${studentId}/`, {
+    fetch(`/app/admission/get-student/${studentId}/`, {
       headers: {
         'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
       }
@@ -756,7 +756,7 @@
     .catch(error => console.error('Error loading batches:', error));
     
     // Fetch student details to populate the form
-    fetch(`/app/get-student/${studentId}/`, {
+    fetch(`/app/admission/get-student/${studentId}/`, {
       headers: {
         'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
       }

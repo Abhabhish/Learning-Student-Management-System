@@ -134,7 +134,7 @@ function loadStudentData(studentId) {
   document.getElementById('edit_parent_phone').value = '';
   document.getElementById('edit_citizenship_no').value = '';
   
-  fetch(`/app/get-student/${studentId}/`)
+  fetch(`/app/hod/get-student/${studentId}/`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -177,7 +177,7 @@ function submitEditStudentForm() {
   const formData = new FormData(form);
   const studentId = document.getElementById('edit_student_id').value;
 
-  fetch(`/app/edit-student/${studentId}/`, {
+  fetch(`/app/hod/edit-student/${studentId}/`, {
     method: 'POST',
     body: formData,
     headers: {

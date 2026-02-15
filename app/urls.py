@@ -120,16 +120,16 @@ urlpatterns = [
     path('edit-subject/<int:subject_id>/', hodviews.edit_subject, name='edit_subject'),
     path('delete-subject/<int:subject_id>/', hodviews.delete_subject, name='delete_subject'),
     
-    # Student Management
-    path('add-student/', hodviews.add_student, name='add_student'),
-    path('get-student/<int:student_id>/', hodviews.get_student, name='get_student'),
-    path('edit-student/<int:student_id>/', hodviews.edit_student, name='edit_student'),
+    # Student Management (HOD)
+    path('hod/add-student/', hodviews.add_student, name='hod_add_student'),
+    path('hod/get-student/<int:student_id>/', hodviews.get_student, name='hod_get_student'),
+    path('hod/edit-student/<int:student_id>/', hodviews.edit_student, name='hod_edit_student'),
     path('delete-student/<int:student_id>/', hodviews.delete_student, name='delete_student'),
     
     # HOD Notice Management
     path('hod/add-notice/', hodviews.add_notice, name='hod_add_notice'),
     path('notice/<int:notice_id>/', hodviews.view_notice, name='view_notice'),
-    path('delete-notice/<int:notice_id>/', hodviews.delete_notice, name='delete_notice'),
+    path('hod/delete-notice/<int:notice_id>/', hodviews.delete_notice, name='hod_delete_notice'),
     
     # Subject File Management
     path(
@@ -254,7 +254,7 @@ urlpatterns = [
     path("saveFCMToken/", views.save_fcm_token, name="saveFCMToken"),
 
     # Admission Officer routes ----------------------------------------
-    path("add-student/", admissionviews.add_student, name="add_student"),
+    path("admission/add-student/", admissionviews.add_student, name="admission_add_student"),
     path("add-batch/", admissionviews.add_batch, name="add_batch"),
     path("add-course/", admissionviews.add_course, name="add_course"),
     path(
@@ -270,9 +270,15 @@ urlpatterns = [
         name="admission_get_students",
     ),
     path(
-        "get-student/<int:student_id>/", admissionviews.get_student, name="get_student"
+        "admission/get-student/<int:student_id>/",
+        admissionviews.get_student,
+        name="admission_get_student",
     ),
-    path("edit-student/", admissionviews.edit_student, name="edit_student"),
+    path(
+        "admission/edit-student/",
+        admissionviews.edit_student,
+        name="admission_edit_student",
+    ),
     path(
         "get-course-tracking/<int:tracking_id>/",
         admissionviews.get_course_tracking,

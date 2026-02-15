@@ -52,6 +52,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "app.middleware.RequestStorageMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -197,6 +198,17 @@ CACHES = config["CACHES"]
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 300
 CACHE_MIDDLEWARE_KEY_PREFIX = 'sms'
+
+# Disable per-site cache middleware in development to avoid auth caching issues
+if DEBUG:
+    MIDDLEWARE = [
+        m for m in MIDDLEWARE
+        if m not in (
+            "django.middleware.cache.UpdateCacheMiddleware",
+            "django.middleware.cache.FetchFromCacheMiddleware",
+        )
+    ]
+    CACHE_MIDDLEWARE_SECONDS = 0
 
 # SMS API configuration
 SMS_API_KEY = config["SMS_API_KEY"]

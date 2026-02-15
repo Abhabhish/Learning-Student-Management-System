@@ -1,2 +1,4 @@
 env
 db.sqlite3
+app/__pycache__
+student_management_system/__pycache__

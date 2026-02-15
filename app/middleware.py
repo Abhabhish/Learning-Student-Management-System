@@ -1,7 +1,35 @@
+import threading
 from django.http import HttpResponse, HttpResponseServerError
 from django.template.loader import render_to_string
 import re
 from django.middleware.csrf import CsrfViewMiddleware
+
+# Thread-local storage for current request so MultiModelBackend.get_user can read session
+_request_local = threading.local()
+
+
+def get_current_request():
+    """Return the current request from thread-local (set by RequestStorageMiddleware)."""
+    return getattr(_request_local, "request", None)
+
+
+class RequestStorageMiddleware:
+    """
+    Store the current request in thread-local so the auth backend can read
+    the session to resolve the correct user model when multiple models share the same pk.
+    Must run after SessionMiddleware and before AuthenticationMiddleware.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        _request_local.request = request
+        try:
+            return self.get_response(request)
+        finally:
+            if hasattr(_request_local, "request"):
+                del _request_local.request
 
 
 class HTTP505Middleware:

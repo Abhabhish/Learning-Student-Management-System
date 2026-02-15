@@ -107,7 +107,7 @@ function closeAddStudentModal() {
 function submitAddStudentForm() {
   const formData = new FormData(document.getElementById('addStudentForm'));
   
-  fetch('{% url "add_student" %}', {
+  fetch('{% url "hod_add_student" %}', {
     method: 'POST',
     body: formData,
     headers: {

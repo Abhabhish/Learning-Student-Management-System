@@ -4,7 +4,19 @@ from django.contrib.auth.models import Group, User
 from django.db.models import Q
 
 # Local app imports
+from app.middleware import get_current_request
 from app.models import Parent, Staff, Student
+
+# Map session model label to model class for get_user (avoids pk collision between tables)
+_USER_MODEL_MAP = {
+    "student": Student,
+    "staff": Staff,
+    "parent": Parent,
+    "user": User,
+}
+
+# Fallback order when _auth_user_model is not in session (e.g. old sessions)
+_GET_USER_ORDER = [Student, Parent, Staff, User]
 
 
 class MultiModelBackend(ModelBackend):
@@ -59,15 +71,28 @@ class MultiModelBackend(ModelBackend):
     def get_user(self, user_id):
         """
         Retrieve a user instance using their ID.
+        Uses session key _auth_user_model (set at login) to resolve the correct table
+        when multiple user models can share the same pk (e.g. Student id=1 and Staff id=1).
         """
-        # Try to get superuser/admin first
+        if user_id is None:
+            return None
         try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            pass
+            user_id = int(user_id)
+        except (TypeError, ValueError):
+            return None
 
-        # Try other user types
-        for model in [Staff, Student, Parent]:
+        request = get_current_request()
+        if request and hasattr(request, "session"):
+            model_label = request.session.get("_auth_user_model")
+            if model_label and model_label in _USER_MODEL_MAP:
+                model = _USER_MODEL_MAP[model_label]
+                try:
+                    return model.objects.get(pk=user_id)
+                except model.DoesNotExist:
+                    return None
+
+        # No session or legacy session: try in fixed order (Student first so id=1 → Student when possible)
+        for model in _GET_USER_ORDER:
             try:
                 return model.objects.get(pk=user_id)
             except model.DoesNotExist:

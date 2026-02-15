@@ -402,6 +402,15 @@ def custom_login(request):
         
         if user is not None:
             login(request, user)
+            # Store which model was used so get_user can resolve correctly when pk overlaps (e.g. Student id=1 vs Staff id=1)
+            if isinstance(user, Student):
+                request.session["_auth_user_model"] = "student"
+            elif isinstance(user, Staff):
+                request.session["_auth_user_model"] = "staff"
+            elif isinstance(user, Parent):
+                request.session["_auth_user_model"] = "parent"
+            else:
+                request.session["_auth_user_model"] = "user"
             next_url = request.POST.get("next", "/app/dashboard/")
             return redirect(next_url)
         else:

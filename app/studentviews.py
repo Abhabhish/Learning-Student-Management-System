@@ -38,7 +38,6 @@ from app.models import (
 
 
 @login_required
-@never_cache
 def studentDashboard(request):
     """View to display the student dashboard with their personal information and progress"""
     student = Student.objects.get(phone=request.user.phone)  # Get the Student object

@@ -80,7 +80,6 @@ load_dotenv()
 
 
 @login_required
-@never_cache
 def dashboard(request):
     """Main dashboard view that redirects to appropriate dashboard based on user role.
 

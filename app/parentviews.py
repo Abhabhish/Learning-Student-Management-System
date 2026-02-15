@@ -32,7 +32,6 @@ from app.models import (
 
 
 @login_required
-@never_cache
 def parent_dashboard(request):
     """
     View for the parent dashboard.
@@ -474,9 +473,9 @@ def get_student_details(request, student_id):
         # Get the student
         student = get_object_or_404(Student, id=student_id)
 
-        # Temporarily bypass strict parent-student relationship check
-        # This allows any parent to view any student for demonstration purposes
-        # In production, you would want to re-enable the stricter check
+        # Restrict to this parent's linked students only (security: prevent viewing other parents' children)
+        if student not in request.user.students.all():
+            return JsonResponse({"error": "You can only view details for your own children."}, status=403)
 
         # Get attendance data
         try:
