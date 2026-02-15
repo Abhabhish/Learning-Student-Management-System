@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "fix(deps)"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "S4NKALP"
+    versioning-strategy: "lockfile-only"
+    allow:
+      - dependency-type: "direct"
+    # Ignore specific problematic packages if needed
+    # ignore:
+    #   - dependency-name: "some-package"
+    #     versions: ["1.x.x"]
