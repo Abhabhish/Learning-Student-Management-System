@@ -217,7 +217,8 @@ SMS_SENDER_ID = config["SMS_SENDER_ID"]
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app",
-    "https://*.ngrok.io"
+    "https://*.ngrok.io",
+    "http://localhost:8080"
 ]
 
 # Firebase settings
